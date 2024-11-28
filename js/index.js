@@ -1,3 +1,4 @@
+////// -------- Map ------------- 
 
   const map = L.map('map').setView([20, 0], 2);
 
@@ -5,7 +6,7 @@
       maxZoom: 5
   }).addTo(map);
 
-  const correctCountry = 'France';
+////// -------- Countries --------
 
   const geoJsonUrl = 'https://raw.githubusercontent.com/johan/world.geo.json/master/countries.geo.json';
 
@@ -31,6 +32,8 @@
       geojsonLayer.resetStyle(e.target);
   }
 
+////// --------- Handle Map Guess ------------
+
   let geojsonLayer = L.geoJson(null, {
       style: defaultStyle,
       onEachFeature: function (feature, layer) {
@@ -40,6 +43,9 @@
                   layer.setStyle(highlightStyle);
               },
               mouseout: resetStyle,
+
+              ////// Handle The Click Of The Map -----------
+
               click: function (e) {
                   const countryName = feature.properties.name;
                   const resultDiv = document.getElementById('result');
