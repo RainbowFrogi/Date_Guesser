@@ -2,17 +2,29 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    font-family: "Bebas Neue", sans-serif;
+    font-style: normal;
 }
 
 body {
     background-color: #EEEEEE;
 }
 
+
+
 #game {
     width: 100%;
     display: flex;
     justify-content: space-evenly;
 }
+
+h1 {
+    font-weight: 500px;
+    text-align: center;
+    font-size: 70px;
+    padding: 30px;
+}
+
 
 #map {
     max-height: 500px; 
