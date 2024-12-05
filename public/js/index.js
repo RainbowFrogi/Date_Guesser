@@ -10,16 +10,18 @@ L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
 
 const geoJsonUrl = 'https://raw.githubusercontent.com/johan/world.geo.json/master/countries.geo.json';
 
+//// The Default Style Of The Countries
 const defaultStyle = {
-    color: '#3388ff',
+    color: 'black',
     weight: 1,
-    fillOpacity: 0.2
+    fillOpacity: 0.01
 };
 
+//// Handle Hover And Click
 const highlightStyle = {
-    color: '#ff0000',
+    color: '#60DE65',
     weight: 2,
-    fillOpacity: 0.6
+    fillOpacity: 0.7
 };
 
 const correctStyle = {
@@ -34,31 +36,67 @@ function resetStyle(e) {
 
 ////// --------- Handle Map Guess ------------
 
+/// Clicked Country
+let clickedCountry = null; 
+let currentClickedLayer = null;
+
 let geojsonLayer = L.geoJson(null, {
     style: defaultStyle,
     onEachFeature: function (feature, layer) {
+        //// Handle Hover Visuals
         layer.on({
             mouseover: function (e) {
                 const layer = e.target;
-                layer.setStyle(highlightStyle);
-            },
-            mouseout: resetStyle,
-
-            ////// Handle The Click Of The Map -----------
-
-            click: function (e) {
-                const countryName = feature.properties.name;
-                const resultDiv = document.getElementById('result');
-                if (countryName === correctCountry) {
-                    resultDiv.innerHTML = `<p>Correct! The photo was taken in ${countryName}.</p>`;
-                    layer.setStyle(correctStyle);
-                } else {
-                    resultDiv.innerHTML = `<p>Wrong! You selected ${countryName}. Try again.</p>`;
+                if (layer !== currentClickedLayer) {
+                    layer.setStyle(highlightStyle);
                 }
+            },
+            //// Handle Hover Visuals
+            mouseout: function (e) {
+                const layer = e.target;
+                if (layer !== currentClickedLayer) {
+                    resetStyle(e);
+                }
+            },
+            /// Handle The Map Selection
+            click: function (e) {
+                const layer = e.target;
+                const countryName = feature.properties.name;
+
+                if (currentClickedLayer && currentClickedLayer !== layer) {
+                    resetStyle({ target: currentClickedLayer });
+                }
+
+                //// Make Sure Only 1 Country Can Be Selected And Saved
+                if (currentClickedLayer !== layer) {
+
+                    currentClickedLayer = layer;
+                    clickedCountry = countryName;
+                    layer.setStyle({
+                        color: 'black',
+                        weight: 2,
+                        fillColor: highlightStyle.color,
+                        fillOpacity: 0.8
+                    });
+                } else {
+
+                    //// Make Sure To UnHighlight The Countries, If Player Chooses To Change Guess
+                    resetStyle(e);
+                    currentClickedLayer = null;
+                    clickedCountry = null;
+                }
+
+                console.log("Selected country:", clickedCountry);
             }
         });
     }
 });
+
+fetch(geoJsonUrl)
+    .then(response => response.json())
+    .then(data => geojsonLayer.addData(data).addTo(map));
+
+
 fetch(geoJsonUrl)
     .then(response => response.json())
     .then(data => geojsonLayer.addData(data).addTo(map));
@@ -71,3 +109,8 @@ const display = document.getElementById('yearDisplay');
 slider.oninput = function() {
   display.textContent = this.value;
 }
+
+//// After User Has Set The Date And Selected The Country Proceed To Calculate The Answer
+const submitGuess = document.querySelector(".takeGuess").addEventListener("click", () => {
+    
+})
