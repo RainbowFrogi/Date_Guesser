@@ -34,6 +34,12 @@ function resetStyle(e) {
     geojsonLayer.resetStyle(e.target);
 }
 
+////// --------- Make Button Clickable Only After Player Has Selected A Country 
+
+const submitButton = document.querySelector('.takeGuess');
+
+submitButton.disabled = true; 
+
 ////// --------- Handle Map Guess ------------
 
 /// Clicked Country
@@ -62,6 +68,7 @@ let geojsonLayer = L.geoJson(null, {
             click: function (e) {
                 const layer = e.target;
                 const countryName = feature.properties.name;
+                submitButton.disabled = false; //// After A Country Is Clicked Make The Submit Button Available
 
                 if (currentClickedLayer && currentClickedLayer !== layer) {
                     resetStyle({ target: currentClickedLayer });
@@ -110,7 +117,7 @@ slider.oninput = function() {
   display.textContent = this.value;
 }
 
+
+
 //// After User Has Set The Date And Selected The Country Proceed To Calculate The Answer
-const submitGuess = document.querySelector(".takeGuess").addEventListener("click", () => {
-    
-})
+
