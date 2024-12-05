@@ -1,5 +1,5 @@
-from flask import Flask, jsonify, render_template, send_from_directory
-# from random import randint
+from flask import Flask, jsonify, render_template, request, send_from_directory
+from random import randint
 # import argparse
 # import json
 # import mysql.connector
@@ -32,7 +32,7 @@ def game():
     # The following function is considered a templating engine/processor/parser
     return render_template("game.html")     #   It returns the "home.html" file from the "templates" folder
 
-@app.route("/result/<result>")
+@app.route("/game/result/<result>")
 def result(result: str):
     # The following function is considered a templating engine/processor/parser
     return render_template("result.html", result=result)     #   It returns the "result.html" file from the "templates" folder
@@ -45,8 +45,18 @@ def result(result: str):
 #     #   It returns the "result.html" file from the "templates" folder
 #     #   and sets the result variable as the value from the path
 
-@app.route("/api/location/random/")
+@app.route("/api/game/location/random/")
 def api_location_random():
+    place = {
+        "location_id": 1,
+        "path": "/public/img/test.png",
+    }
+    return jsonify(place)
+
+@app.route("/api/game/guess/")
+def api_game_guess():
+    body = request.json()
+    print(body)
     place = {
         "location_id": 1,
         "path": "/public/img/test.png",

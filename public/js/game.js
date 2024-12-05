@@ -136,7 +136,7 @@ async function submitTheGuess() {
             id : locationID              //// Location ID
         }
 
-        const response = await fetch('/api/guess/', {
+        const response = await fetch('/api/game/guess/', {
             body: JSON.stringify(sendGuessData),
         });
 
@@ -157,7 +157,7 @@ async function submitTheGuess() {
 ///// Get The Random Picture
 
 async function getTheRandomLocation(){
-    fetch("/api/location/random/").then((response) => {
+    fetch("/api/game/location/random/").then((response) => {
         if (response.ok) {
         console.log("Response", response)
         return response.json();
