@@ -62,3 +62,12 @@
   fetch(geoJsonUrl)
       .then(response => response.json())
       .then(data => geojsonLayer.addData(data).addTo(map));
+
+////// --------- SLIDEBAR ------------
+
+const slider = document.getElementById('yearSlider');
+const display = document.getElementById('yearDisplay');
+
+slider.oninput = function() {
+    display.textContent = this.value;
+  }
