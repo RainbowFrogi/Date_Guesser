@@ -49,8 +49,6 @@ def result(result: str):
 def api_location_random():
     place = {
         "location_id": 1,
-        "year": 2024,
-        "country": "Finland",
         "path": "/public/img/test.png",
     }
     return jsonify(place)
