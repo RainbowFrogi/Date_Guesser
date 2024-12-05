@@ -1,3 +1,5 @@
+let locationID = null;
+
 ////// -------- Map ------------- 
 
 const map = L.map('map').setView([20, 0], 2);
@@ -125,6 +127,7 @@ slider.oninput = function() {
 submitButton.addEventListener('click', submitTheGuess);
 
 async function submitTheGuess() {
+
     try {
 
         const sendGuessData = {
@@ -133,11 +136,7 @@ async function submitTheGuess() {
             id : 1              //// Location ID
         }
 
-        const response = await fetch('http://localhost:3000/api/guess', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
+        const response = await fetch('/api/guess/', {
             body: JSON.stringify(sendGuessData),
         });
 
@@ -157,4 +156,21 @@ async function submitTheGuess() {
 
 ///// Get The Random Picture
 
-
+async function getTheRandomLocation(){
+    fetch("/api/location/random/").then((response) => {
+        if (response.ok) {
+        console.log("Response", response)
+        return response.json();
+        }
+        throw new Error('Something went wrong');
+    })
+    .then((responseJson) => {
+        console.log("ResponseJSON", responseJson)
+        locationID = responseJson.location_id
+        document.getElementById("photo").src = responseJson.path;
+    })
+    .catch((error) => {
+        console.log(error)
+    });
+}
+getTheRandomLocation()
