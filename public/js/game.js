@@ -133,7 +133,7 @@ async function submitTheGuess() {
         const sendGuessData = {
             country: clickedCountry,   /// The Country The Player Selected
             year: slider.value,   //// SlideBar Year
-            id : 1              //// Location ID
+            id : locationID              //// Location ID
         }
 
         const response = await fetch('/api/guess/', {
