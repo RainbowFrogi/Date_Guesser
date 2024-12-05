@@ -118,6 +118,35 @@ slider.oninput = function() {
 }
 
 
-
 //// After User Has Set The Date And Selected The Country Proceed To Calculate The Answer
 
+
+submitButton.addEventListener('click', submitTheGuess);
+
+async function submitTheGuess() {
+    try {
+
+        const sendGuessData = {
+            country: clickedCountry,
+            year: slider.value
+        }
+
+        const response = await fetch('http://localhost:3000/Guess', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(sendGuessData),
+        });
+
+        if (!response.ok) {
+            throw new Error(`Error: ${response.status} - ${response.statusText}`);
+        }
+
+        const responseData = await response.json();
+        console.log(responseData);
+
+    } catch (error) {
+        console.error('Error submitting guess:', error);
+    }
+}
