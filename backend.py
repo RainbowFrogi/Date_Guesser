@@ -1,4 +1,4 @@
-from flask import Flask, render_template, send_from_directory
+from flask import Flask, jsonify, render_template, send_from_directory
 # from random import randint
 # import argparse
 # import json
@@ -24,15 +24,35 @@ def public(filename):
 # DYNAMIC ---------------------
 @app.route("/")
 def home():
+    # The following function is considered a templating engine/processor/parser
     return render_template("home.html")     #   It returns the "home.html" file from the "templates" folder
 
 @app.route("/result/<result>")
 def result(result: str):
-    print(result)
-    return render_template("result.html", result=result)
-    #   It returns the "result.html" file from the "templates" folder
-    #   and sets the result variable as the value from the path
+    # The following function is considered a templating engine/processor/parser
+    return render_template("result.html", result=result)     #   It returns the "result.html" file from the "templates" folder
 
+# @app.route("/api/guess/<id>/<year>/<country>")
+# def result(id: int, year: int, country: str):
+# print(result)
+#   # The following function is considered a templating engine/processor/parser
+#     return render_template("result.html", result=result)
+#     #   It returns the "result.html" file from the "templates" folder
+#     #   and sets the result variable as the value from the path
+
+@app.route("/api/location/random/")
+def api_location_random():
+    place = {
+        "location_id": 1,
+        "year": 2024,
+        "country": "Finland",
+        "path": "/public/img/test.png",
+    }
+    return jsonify(place)
+
+@app.errorhandler(404)
+def page_not_found(error):
+    return render_template('page_not_found.html'), 404
 
 # ---------------------
 #   START SERVER
