@@ -27,6 +27,11 @@ def home():
     # The following function is considered a templating engine/processor/parser
     return render_template("home.html")     #   It returns the "home.html" file from the "templates" folder
 
+@app.route("/game")
+def game():
+    # The following function is considered a templating engine/processor/parser
+    return render_template("game.html")     #   It returns the "home.html" file from the "templates" folder
+
 @app.route("/result/<result>")
 def result(result: str):
     # The following function is considered a templating engine/processor/parser

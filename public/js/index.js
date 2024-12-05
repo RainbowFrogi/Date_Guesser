@@ -43,8 +43,9 @@ submitButton.disabled = true;
 ////// --------- Handle Map Guess ------------
 
 /// Clicked Country
-let clickedCountry = null; 
-let currentClickedLayer = null;
+let clickedCountry = null;  /// <----- THE COUNTRY THAT PLAYER HAS SELECTED !!!
+
+let currentClickedLayer = null; /// Part Of The Function Not To Be Confused With the Top One /// Helps With The Selection Of Only One Country
 
 let geojsonLayer = L.geoJson(null, {
     style: defaultStyle,
@@ -110,7 +111,7 @@ fetch(geoJsonUrl)
 
 ////// --------- SLIDEBAR ------------
 
-const slider = document.getElementById('yearSlider');
+const slider = document.getElementById('yearSlider');  ///// SlideBar Year 
 const display = document.getElementById('yearDisplay');
 
 slider.oninput = function() {
@@ -127,11 +128,12 @@ async function submitTheGuess() {
     try {
 
         const sendGuessData = {
-            country: clickedCountry,
-            year: slider.value
+            country: clickedCountry,   /// The Country The Player Selected
+            year: slider.value,   //// SlideBar Year
+            id : 1              //// Location ID
         }
 
-        const response = await fetch('http://localhost:3000/Guess', {
+        const response = await fetch('http://localhost:3000/api/guess', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -146,7 +148,13 @@ async function submitTheGuess() {
         const responseData = await response.json();
         console.log(responseData);
 
+
+
     } catch (error) {
         console.error('Error submitting guess:', error);
     }
 }
+
+///// Get The Random Picture
+
+
