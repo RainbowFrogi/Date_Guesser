@@ -1,43 +1,54 @@
 <!DOCTYPE html>
 <html>
-<head>
+  <head>
     <title>Guess The Date</title>
-    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css">
-    <link rel="stylesheet" href="public/css/global.css">
-    <link rel="stylesheet" href="public/css/style.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Archivo:ital,wght@0,100..900;1,100..900&family=Bebas+Neue&family=Lusitana:wght@400;700&family=Oswald:wght@200..700&family=Oxanium:wght@200..800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/public/css/home.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Archivo:ital,wght@0,100..900;1,100..900&family=Bebas+Neue&family=Lusitana:wght@400;700&family=Oswald:wght@200..700&family=Oxanium:wght@200..800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Archivo:ital,wght@0,100..900;1,100..900&family=Bebas+Neue&family=Lusitana:wght@400;700&family=Open+Sans:ital,wght@0,300..800;1,300..800&family=Oswald:wght@200..700&family=Oxanium:wght@200..800&display=swap"
+      rel="stylesheet"
+    />
     <style>
-        .info { padding: 10px; font-size: 16px; }
+      .info {
+        padding: 10px;
+        font-size: 16px;
+      }
     </style>
-    <script src="/public/js/index.js" defer></script>
-</head>
-<body>
-    <h1>Guess The Date</h1>
-    <div id = "game">
-        <div id="photo-container">
-            <img id="photo" src="public/img/test.png">
-        </div>
-        <div id = "scoreNow">
-            <div id = "Score">
-                <h3> Score </h3>
-                <p id="currentScore">0</p>
-            </div>
-            <div id = "Round">
-                <h3>Round</h3>
-                <p id ="currentRound">0</p>
-            </div>
-        </div>
-        <div id="map"></div>
-    </div>
-    <div class="sliderContainer">
-        <p>Move the Slider to Set the Date</p>
-        <input type="range" min="1800" max="2024" value="1012" id="yearSlider">
-        <div class="value-display" id="yearDisplay">1800</div>
-        <button class = "takeGuess">Submit Guess</button>
+    <script src="/public/js/home.js" defer></script>
+  </head>
+  <body>
+    <div id="home">
+      <h1>Guess The Date</h1>
+      <div class="homeButtons">
+        <a href="/game" id="playButton">Play</a>
+        <button id="howToButton">How to Play</button>
       </div>
-    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
-    <script src="https://unpkg.com/leaflet-ajax"></script>
-</body>
+    </div>
+
+    <!-- Modal -->
+    <div id="modal" class="modal">
+      <div class="modal-content">
+        <span class="close">&times;</span>
+        <div id="modalTitle">
+          <h2>How to Play</h2>
+          <h3>Welcome to Guess The Date! Here's how to play:</h3>
+        </div>
+        <p>
+          The game presents you with a picture of a random location from the
+          years 1800 to 2024. Your task is to guess the year by adjusting the
+          year slider and identify the country where the picture was taken. The
+          closer your year guess is to the correct date, the more points you
+          earn. However, for countries, you must guess the exact country to earn
+          points—near guesses won’t count.
+        </p>
+      </div>
+    </div>
+  </body>
 </html>
