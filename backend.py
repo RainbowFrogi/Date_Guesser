@@ -1,6 +1,6 @@
 from flask import Flask, jsonify, render_template, request, send_from_directory
+from model import get_location_ammount, get_location
 from random import randint
-# import argparse
 # import json
 # import mysql.connector
 
@@ -46,10 +46,11 @@ def result(result: str):
 #     #   and sets the result variable as the value from the path
 
 @app.route("/api/game/location/random/")
-def api_location_random():
+def api_game_location_random():
+    
     place = {
         "location_id": 1,
-        "path": "/public/img/test.png",
+        "path": "/public/img/1.jpg",
     }
     return jsonify(place)
 
@@ -59,7 +60,7 @@ def api_game_guess():
     print(body)
     place = {
         "location_id": 1,
-        "path": "/public/img/test.png",
+        "path": "/public/img/1.jpg",
     }
     return jsonify(place)
 
