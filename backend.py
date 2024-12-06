@@ -1,5 +1,5 @@
 from flask import Flask, jsonify, render_template, request, send_from_directory
-from model import get_location_ammount, get_location
+from model import get_location, get_location_max
 from random import randint
 # import json
 # import mysql.connector
@@ -47,10 +47,12 @@ def result(result: str):
 
 @app.route("/api/game/location/random/")
 def api_game_location_random():
-    
+    max = get_location_max()
+    print(max[0])
+    place = get_location(randint(1,max[0]))
     place = {
-        "location_id": 1,
-        "path": "/public/img/1.jpg",
+        "location_id": place[0],
+        "path": place[1],
     }
     return jsonify(place)
 
