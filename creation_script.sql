@@ -1,10 +1,14 @@
 -- DATABASE
-DROP DATABASE IF EXISTS guess_location;
-CREATE DATABASE guess_location;
+DROP DATABASE IF EXISTS 'guess_location';
+CREATE DATABASE 'guess_location';
 -- CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci;
 -- USER
 DROP USER IF EXISTS guess_location_player;
-CREATE USER guess_location_player IDENTIFIED BY 'g43S5_pa5sword';
+CREATE USER 'guess_location_player'@'localhost' IDENTIFIED BY 'g43S5_pa5sword';
+
+GRANT SELECT, INSERT, UPDATE, DELETE ON guess_location.* TO 'guess_location_player'@'localhost';
+
+FLUSH PRIVILEGES;
 
 -- TABLES
 USE guess_location;
@@ -15,7 +19,7 @@ CREATE TABLE locations (
     year int,
     country varchar(1024),
     image_path varchar(1024),
-    PRIMARY KEY (location_id),
+    PRIMARY KEY (location_id)
 );
 
 INSERT INTO locations( location_id, year, country, image_path)
@@ -29,5 +33,3 @@ VALUES
 (7,1959,"Cuba", "/public/img/7.jpg"),
 (8,1984,"Russia", "/public/img/8.jpg"),
 (9,1969,"United States of America", "/public/img/9.jpg");
-
-
