@@ -1,9 +1,9 @@
 -- DATABASE
-DROP DATABASE IF EXISTS 'guess_location';
-CREATE DATABASE 'guess_location';
+DROP DATABASE IF EXISTS guess_location;
+CREATE DATABASE guess_location;
 -- CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci;
 -- USER
-DROP USER IF EXISTS guess_location_player;
+DROP USER IF EXISTS 'guess_location_player'@'localhost';
 CREATE USER 'guess_location_player'@'localhost' IDENTIFIED BY 'g43S5_pa5sword';
 
 GRANT SELECT, INSERT, UPDATE, DELETE ON guess_location.* TO 'guess_location_player'@'localhost';
