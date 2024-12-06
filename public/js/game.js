@@ -1,5 +1,8 @@
 let locationID = null;
 
+const scoreHtml = document.getElementById("currentScore");
+const roundHtml = document.getElementById("currentRound");
+
 ////// -------- Map -------------
 
 const map = L.map("map").setView([20, 0], 2);
@@ -130,7 +133,7 @@ async function submitTheGuess() {
             year: slider.value, //// SlideBar Year
             id: locationID, //// Location ID
         };
-
+        // 1. Check if correct
         const response = await fetch("/api/game/guess/", {
             method: "POST",
             headers: {
@@ -143,7 +146,26 @@ async function submitTheGuess() {
         }
 
         const responseData = await response.json();
-        console.log(responseData);
+        console.log(responseData.correct);
+        // 2. update round
+        if (responseData.correct) {
+            let score = parseInt(scoreHtml.innerText);
+            score += 1;
+            const scoreText = document.createTextNode(score)
+            scoreHtml.innerHTML = ""
+            scoreHtml.appendChild(scoreText)
+        }
+        let round = parseInt(roundHtml.innerText);
+        round += 1;
+        const roundText = document.createTextNode(round)
+        roundHtml.innerHTML = ""
+        roundHtml.appendChild(roundText)
+        // 3. Clean map selection
+        geojsonLayer.resetStyle();
+        clickedCountry = null;
+        submitButton.disabled = true;
+        // 4. update image
+        getTheRandomLocation();
     } catch (error) {
         console.error("Error submitting guess:", error);
     }
