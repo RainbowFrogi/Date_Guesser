@@ -90,10 +90,11 @@ let geojsonLayer = L.geoJson(null, {
                     });
                 } else {
 
-                    //// Make Sure To UnHighlight The Countries, If Player Chooses To Change Guess
+                    //// Make Sure To UnHighlight The Countries, If Player Chooses The Same Country
                     resetStyle(e);
                     currentClickedLayer = null;
                     clickedCountry = null;
+                    submitButton.disabled = true;
                 }
 
                 console.log("Selected country:", clickedCountry);
@@ -174,3 +175,4 @@ async function getTheRandomLocation(){
     });
 }
 getTheRandomLocation()
+
