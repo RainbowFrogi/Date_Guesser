@@ -123,27 +123,38 @@ slider.oninput = function () {
 
 submitButton.addEventListener("click", submitTheGuess);
 
+
 async function submitTheGuess() {
   try {
-    const sendGuessData = {
-      country: clickedCountry, /// The Country The Player Selected
-      year: slider.value, //// SlideBar Year
-      id: locationID, //// Location ID
-    };
+    // console.log(slider.value)
+    // const sendGuessData = {
+    //   country: clickedCountry, /// The Country The Player Selected
+    //   year: slider.value, //// SlideBar Year
+    //   id: locationID, //// Location ID
+    // };
 
-    const response = await fetch("/api/game/guess/", {
-      body: JSON.stringify(sendGuessData),
-    });
+    // const response = await fetch("/api/game/guess/", {
+    //   method: 'POST',
+    //   body: JSON.stringify(sendGuessData), 
+    // });
 
-    if (!response.ok) {
-      throw new Error(`Error: ${response.status} - ${response.statusText}`);
-    }
+    // if (!response.ok) {
+    //   throw new Error(`Error: ${response.status} - ${response.statusText}`);
+    // }
+
+    //// Calculate The Points And Add A Round 
 
     const responseData = await response.json();
     console.log(responseData);
+
+    //// 1. - 
+
+
+
   } catch (error) {
     console.error("Error submitting guess:", error);
   }
+
 }
 
 ///// Get The Random Picture
@@ -152,7 +163,6 @@ async function getTheRandomLocation() {
   fetch("/api/game/location/random/")
     .then((response) => {
       if (response.ok) {
-        console.log("Response", response);
         return response.json();
       }
       throw new Error("Something went wrong");
