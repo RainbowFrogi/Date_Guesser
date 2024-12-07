@@ -1,5 +1,5 @@
 from flask import Flask, jsonify, render_template, request, send_from_directory
-from model import get_location, get_location_max
+from model import get_location, get_location_max, is_location_correct
 from random import randint
 # import json
 # import mysql.connector
@@ -56,15 +56,12 @@ def api_game_location_random():
     }
     return jsonify(place)
 
-@app.route("/api/game/guess/")
+@app.route("/api/game/guess/", methods=["POST"])
 def api_game_guess():
-    body = request.json()
+    body = request.get_json()
     print(body)
-    place = {
-        "location_id": 1,
-        "path": "/public/img/1.jpg",
-    }
-    return jsonify(place)
+    correct = is_location_correct(body["id"], body["year"], body["country"])
+    return jsonify({"correct": correct})
 
 @app.errorhandler(404)
 def page_not_found(error):

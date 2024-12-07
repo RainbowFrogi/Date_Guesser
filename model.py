@@ -20,7 +20,7 @@ def get_location(id: int):
 
 def is_location_correct( id: int, year: int, country: str):
     cursor = connection.cursor()
-    cursor.execute(f"SELECT * FROM locations WHERE location_id = {id} AND year = {year} AND country = '{country}';")
+    cursor.execute(f"SELECT * FROM locations WHERE location_id = {id} AND year >= {year}-5 AND year <= {year}+5 AND country = '{country}';")
     row = cursor.fetchone()
     while row is not None:
         return True
