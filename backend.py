@@ -59,9 +59,9 @@ def api_game_location_random():
 @app.route("/api/game/guess/", methods=["POST"])
 def api_game_guess():
     body = request.get_json()
-    print(body)
-    correct = is_location_correct(body["id"], body["year"], body["country"])
-    return jsonify({"correct": correct})
+    answer = is_location_correct(body["id"], body["year"], body["country"])
+    return answer
+
 
 @app.errorhandler(404)
 def page_not_found(error):
