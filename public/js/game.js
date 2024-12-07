@@ -1,4 +1,13 @@
+
+
 let locationID = null;
+
+let rounds = 1;
+
+let points = 0;
+
+let correctCountryGuess = null;
+
 
 ////// -------- Map -------------
 
@@ -36,12 +45,6 @@ const correctStyle = {
 function resetStyle(e) {
   geojsonLayer.resetStyle(e.target);
 }
-
-////// --------- Make Button Clickable Only After Player Has Selected A Country
-
-const submitButton = document.querySelector(".takeGuess");
-
-submitButton.disabled = true;
 
 ////// --------- Handle Map Guess ------------
 
@@ -121,34 +124,43 @@ slider.oninput = function () {
 
 //// After User Has Set The Date And Selected The Country Proceed To Calculate The Answer
 
-submitButton.addEventListener("click", submitTheGuess);
-
-
 async function submitTheGuess() {
   try {
-    // console.log(slider.value)
-    // const sendGuessData = {
-    //   country: clickedCountry, /// The Country The Player Selected
-    //   year: slider.value, //// SlideBar Year
-    //   id: locationID, //// Location ID
-    // };
+    console.log(slider.value)
+    const sendGuessData = {
+      country: clickedCountry, /// The Country The Player Selected
+      year: slider.value, //// SlideBar Year
+      id: locationID //// Location ID
+    };
+    console.log(sendGuessData)
 
-    // const response = await fetch("/api/game/guess/", {
-    //   method: 'POST',
-    //   body: JSON.stringify(sendGuessData), 
-    // });
+    const response = await fetch("/api/game/guess/", {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(sendGuessData), 
+    });
 
-    // if (!response.ok) {
-    //   throw new Error(`Error: ${response.status} - ${response.statusText}`);
-    // }
+    if (!response.ok) {
+      throw new Error(`Error: ${response.status} - ${response.statusText}`);
+    }
 
-    //// Calculate The Points And Add A Round 
+    // Calculate The Points And Add A Round
 
     const responseData = await response.json();
-    console.log(responseData);
+    console.log(responseData)
 
-    //// 1. - 
+    //// 1. - Check if Country is Right :
+    if (responseData.country){
+      correctCountryGuess = true;
+      points += 500;
+    } else {
+      correctCountryGuess = false;
+      return false
+    }
 
+    //// 1. - Check Points For Year Guess : 
 
 
   } catch (error) {
@@ -156,6 +168,40 @@ async function submitTheGuess() {
   }
 
 }
+
+const displayDiv = document.querySelector("#displayResult");
+
+function resetRound(){
+  getTheRandomLocation();
+  resetStyle({ target: currentClickedLayer });
+  currentClickedLayer = null;
+  clickedCountry = null;
+  submitButton.disabled = true;
+  submitButton.textContent = "Submit Guess";
+  submitButtonRoundChange = false;
+  addRounds()
+  addPoints()
+  while (displayDiv.firstChild) {
+    displayDiv.removeChild(displayDiv.firstChild);  //// Clear The Display;
+  };
+
+};
+
+
+function displayResult(){
+  if (correctCountryGuess){
+    const informPlayer = document.createElement("p");
+    informPlayer.textContent = `You got 100 points by guessing the right country (${clickedCountry})!`
+    displayDiv.appendChild(informPlayer)
+  } else {
+    const informPlayer = document.createElement("p");
+    informPlayer.textContent = `The right country was (?)! You got 0 points.`
+    displayDiv.appendChild(informPlayer)
+  }
+
+
+};
+
 
 ///// Get The Random Picture
 
@@ -209,3 +255,39 @@ function zoomImage(direction)
     let image = document.querySelector("#photo");
     image.style.transform = "scale(" + currentZoom + ")";
 }
+
+
+//// UpdatePoints
+function addPoints(){
+  document.querySelector("#currentScore").textContent = `${points}`
+};
+//// UpdatePoints
+function addRounds(){
+  rounds += 1;
+  document.querySelector("#currentRound").textContent = `${rounds}`
+}
+
+/// Submit Button
+
+////// --------- Make Button Clickable Only After Player Has Selected A Country and Change the Functionality After Submitting Guess
+
+const submitButton = document.querySelector(".takeGuess");
+
+submitButton.disabled = true;
+
+submitButtonRoundChange = false;
+
+//// ---- Change Button Behaviour After Guess And Initiate the Guess
+
+submitButton.addEventListener("click", function(){
+
+  if (!submitButtonRoundChange){
+    submitTheGuess()
+    displayResult()
+    submitButtonRoundChange = true;
+    submitButton.textContent = "Next Round";
+    
+  } else {
+    resetRound()
+  }
+})
