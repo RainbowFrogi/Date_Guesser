@@ -1,12 +1,11 @@
 
-
 let locationID = null;
 
 let rounds = 1;
 
 let points = 0;
 
-let correctCountryGuess = null;
+let roundResults = null;
 
 
 ////// -------- Map -------------
@@ -48,10 +47,9 @@ function resetStyle(e) {
 
 ////// --------- Handle Map Guess ------------
 
-/// Clicked Country
 let clickedCountry = null; /// <----- THE COUNTRY THAT PLAYER HAS SELECTED !!!
 
-let currentClickedLayer = null; /// Part Of The Function Not To Be Confused With the Top One /// Helps With The Selection Of Only One Country
+let currentClickedLayer = null; /// Part Of The Function Not To Be Confused With the Top One. Helps With The Selection Of Only One Country.
 
 let geojsonLayer = L.geoJson(null, {
   style: defaultStyle,
@@ -124,13 +122,14 @@ slider.oninput = function () {
 
 //// After User Has Set The Date And Selected The Country Proceed To Calculate The Answer
 
+
 async function submitTheGuess() {
   try {
     console.log(slider.value)
     const sendGuessData = {
       country: clickedCountry, /// The Country The Player Selected
-      year: slider.value, //// SlideBar Year
-      id: locationID //// Location ID
+      year: slider.value,     /// SlideBar Year
+      id: locationID         /// Location ID
     };
     console.log(sendGuessData)
 
@@ -151,17 +150,7 @@ async function submitTheGuess() {
     const responseData = await response.json();
     console.log(responseData)
 
-    //// 1. - Check if Country is Right :
-    if (responseData.country){
-      correctCountryGuess = true;
-      points += 500;
-    } else {
-      correctCountryGuess = false;
-      return false
-    }
-
-    //// 1. - Check Points For Year Guess : 
-
+    roundResults = responseData;   //// Log the Data To The Global Variable For Code Cleanliness
 
   } catch (error) {
     console.error("Error submitting guess:", error);
@@ -172,34 +161,36 @@ async function submitTheGuess() {
 const displayDiv = document.querySelector("#displayResult");
 
 function resetRound(){
-  getTheRandomLocation();
-  resetStyle({ target: currentClickedLayer });
-  currentClickedLayer = null;
-  clickedCountry = null;
-  submitButton.disabled = true;
-  submitButton.textContent = "Submit Guess";
-  submitButtonRoundChange = false;
-  addRounds()
-  addPoints()
-  while (displayDiv.firstChild) {
-    displayDiv.removeChild(displayDiv.firstChild);  //// Clear The Display;
-  };
 
+  if (rounds === 6){
+    endGame()
+
+  } else {
+
+    getTheRandomLocation();
+    resetStyle({ target: currentClickedLayer });
+    currentClickedLayer = null;
+    clickedCountry = null;
+    submitButton.disabled = true;
+    submitButton.textContent = "Submit Guess";
+    submitButtonRoundChange = false;
+    addPoints()
+    while (displayDiv.firstChild) {
+      displayDiv.removeChild(displayDiv.firstChild);                     //// Clear The Display;
+    roundResults = null;  //// Clear Results For Next Game
+    };
+  }
 };
 
 
 function displayResult(){
-  if (correctCountryGuess){
-    const informPlayer = document.createElement("p");
-    informPlayer.textContent = `You got 100 points by guessing the right country (${clickedCountry})!`
-    displayDiv.appendChild(informPlayer)
-  } else {
-    const informPlayer = document.createElement("p");
-    informPlayer.textContent = `The right country was (?)! You got 0 points.`
-    displayDiv.appendChild(informPlayer)
-  }
+    const informPlayerCountry = document.createElement("p");           ///// Inform About Their Country Results
+    informPlayerCountry.textContent = `${roundResults.message_country}`;
+    displayDiv.appendChild(informPlayerCountry);
 
-
+    const informPlayerYear = document.createElement("p");
+    informPlayerYear.textContent = `${roundResults.message_date}`;     ///// Inform About Their Year Guess
+    displayDiv.appendChild(informPlayerCountry);
 };
 
 
@@ -259,6 +250,7 @@ function zoomImage(direction)
 
 //// UpdatePoints
 function addPoints(){
+  points += roundResults.point;
   document.querySelector("#currentScore").textContent = `${points}`
 };
 //// UpdatePoints
@@ -267,27 +259,37 @@ function addRounds(){
   document.querySelector("#currentRound").textContent = `${rounds}`
 }
 
-/// Submit Button
+/// After 5 Rounds Redirect The User To Results Page
 
-////// --------- Make Button Clickable Only After Player Has Selected A Country and Change the Functionality After Submitting Guess
+function endGame(){
+  alert("Game Ended!")
+}
+
+
+/// Submit Button
 
 const submitButton = document.querySelector(".takeGuess");
 
 submitButton.disabled = true;
 
-submitButtonRoundChange = false;
+let submitButtonRoundChange = false;
 
 //// ---- Change Button Behaviour After Guess And Initiate the Guess
 
 submitButton.addEventListener("click", function(){
 
   if (!submitButtonRoundChange){
-    submitTheGuess()
-    displayResult()
+    submitTheGuess();
+    displayResult();
     submitButtonRoundChange = true;
-    submitButton.textContent = "Next Round";
-    
+    //// Change The Button To See Results At 5th Round
+    if (rounds === 5){
+      submitButton.textContent = "See Results";
+    } else {
+      submitButton.textContent = "Next Round";
+    }
   } else {
+    addRounds()
     resetRound()
   }
 })
