@@ -129,7 +129,7 @@ async function submitTheGuess() {
     console.log(slider.value)
     const sendGuessData = {
       country: clickedCountry, /// The Country The Player Selected
-      year: slider.value, //// SlideBar Year
+      year: parseInt(slider.value), //// SlideBar Year
       id: locationID //// Location ID
     };
     console.log(sendGuessData)
