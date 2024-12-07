@@ -17,7 +17,7 @@ background-position: top center;
 
 
 .background-wrapper {
-background-image: url(/BackGroundMap.png);
+background-image: url(/public/img/BackGroundMap.png);
 background-repeat: no-repeat;
 background-size: contain; 
 background-position: top center;
@@ -57,6 +57,11 @@ text-align: center;
 margin-top: 20px;
 font-size: 40px;
 color: black;
+}
+
+#score {
+    font-size: 80px;
+    color: black;
 }
 
 
