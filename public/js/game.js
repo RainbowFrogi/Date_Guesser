@@ -128,13 +128,8 @@ async function submitTheGuess() {
     console.log(slider.value)
     const sendGuessData = {
       country: clickedCountry, /// The Country The Player Selected
-<<<<<<< HEAD
-      year: slider.value,     /// SlideBar Year
-      id: locationID         /// Location ID
-=======
       year: parseInt(slider.value), //// SlideBar Year
       id: locationID //// Location ID
->>>>>>> 3c79856113db66859793ba0f03600bf4b0cb3671
     };
     console.log(sendGuessData)
 
@@ -153,6 +148,7 @@ async function submitTheGuess() {
     // Calculate The Points And Add A Round
 
     const responseData = await response.json();
+
     console.log(responseData)
 
     roundResults = responseData;   //// Log the Data To The Global Variable For Code Cleanliness
@@ -182,7 +178,6 @@ function resetRound(){
     addPoints()
     while (displayDiv.firstChild) {
       displayDiv.removeChild(displayDiv.firstChild);                     //// Clear The Display;
-    roundResults = null;  //// Clear Results For Next Game
     };
   }
 };
@@ -195,7 +190,7 @@ function displayResult(){
 
     const informPlayerYear = document.createElement("p");
     informPlayerYear.textContent = `${roundResults.message_date}`;     ///// Inform About Their Year Guess
-    displayDiv.appendChild(informPlayerCountry);
+    displayDiv.appendChild(informPlayerYear);
 };
 
 
@@ -255,7 +250,7 @@ function zoomImage(direction)
 
 //// UpdatePoints
 function addPoints(){
-  points += roundResults.point;
+  points += roundResults.points;
   document.querySelector("#currentScore").textContent = `${points}`
 };
 //// UpdatePoints
@@ -281,10 +276,10 @@ let submitButtonRoundChange = false;
 
 //// ---- Change Button Behaviour After Guess And Initiate the Guess
 
-submitButton.addEventListener("click", function(){
+submitButton.addEventListener("click", async function(){
 
   if (!submitButtonRoundChange){
-    submitTheGuess();
+    await submitTheGuess();
     displayResult();
     submitButtonRoundChange = true;
     //// Change The Button To See Results At 5th Round
@@ -292,9 +287,10 @@ submitButton.addEventListener("click", function(){
       submitButton.textContent = "See Results";
     } else {
       submitButton.textContent = "Next Round";
-    }
+    };
   } else {
     addRounds()
     resetRound()
+    roundResults = null;  //// Clear Results For Next Game
   }
 })
