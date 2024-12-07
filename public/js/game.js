@@ -120,8 +120,8 @@ slider.oninput = function () {
   display.textContent = this.value;
 };
 
-//// After User Has Set The Date And Selected The Country Proceed To Calculate The Answer
 
+//// Send The Guess To The Backend for Checking
 
 async function submitTheGuess() {
   try {
@@ -145,7 +145,7 @@ async function submitTheGuess() {
       throw new Error(`Error: ${response.status} - ${response.statusText}`);
     }
 
-    // Calculate The Points And Add A Round
+    //// Backend response
 
     const responseData = await response.json();
 
@@ -159,7 +159,10 @@ async function submitTheGuess() {
 
 }
 
-const displayDiv = document.querySelector("#displayResult");
+const displayDiv = document.querySelector("#displayResult");  //// The Div Where The Round Results Will Be Shown
+
+
+/// Function That Resets The Round
 
 function resetRound(){
 
@@ -171,13 +174,13 @@ function resetRound(){
     getTheRandomLocation();
     resetStyle({ target: currentClickedLayer });
     currentClickedLayer = null;
-    clickedCountry = null;
+    clickedCountry = null;         //// Reset Everything 
     submitButton.disabled = true;
-    submitButton.textContent = "Submit Guess";
+    submitButton.textContent = "Submit Guess";  //// Change Button Back to Submit Guess
     submitButtonRoundChange = false;
     addPoints()
     while (displayDiv.firstChild) {
-      displayDiv.removeChild(displayDiv.firstChild);                     //// Clear The Display;
+      displayDiv.removeChild(displayDiv.firstChild);                     //// Clear The Results Div;
     };
   }
 };
@@ -194,12 +197,12 @@ function displayResult(){
 };
 
 
-///// Get The Random Picture
+///// Get The Random Picture From Backend
 
 async function getTheRandomLocation() {
   fetch("/api/game/location/random/")
     .then((response) => {
-      if (response.ok) {
+      if (response.ok) {                   
         return response.json();
       }
       throw new Error("Something went wrong");
@@ -207,7 +210,7 @@ async function getTheRandomLocation() {
     .then((responseJson) => {
       console.log("ResponseJSON", responseJson);
       locationID = responseJson.location_id;
-      document.getElementById("photo").src = responseJson.path;
+      document.getElementById("photo").src = responseJson.path;   //// Display The Image Using Path From Backend
     })
     .catch((error) => {
       console.log(error);
@@ -248,22 +251,28 @@ function zoomImage(direction)
 }
 
 
+
+
 //// UpdatePoints
 function addPoints(){
   points += roundResults.points;
   document.querySelector("#currentScore").textContent = `${points}`
 };
+
 //// UpdatePoints
 function addRounds(){
   rounds += 1;
   document.querySelector("#currentRound").textContent = `${rounds}`
 }
 
+
 /// After 5 Rounds Redirect The User To Results Page
 
 function endGame(){
-  alert("Game Ended!")
+  window.location.href = `/game/result/${points}`;
 }
+
+
 
 
 /// Submit Button
@@ -279,10 +288,10 @@ let submitButtonRoundChange = false;
 submitButton.addEventListener("click", async function(){
 
   if (!submitButtonRoundChange){
-    await submitTheGuess();
+    await submitTheGuess();   //// Wait For submitTheGuess To Finish Fetching Everything Before Proceeding To The Next Line
     displayResult();
     submitButtonRoundChange = true;
-    //// Change The Button To See Results At 5th Round
+    //// Change The Button To "See Results" At 5th Round
     if (rounds === 5){
       submitButton.textContent = "See Results";
     } else {

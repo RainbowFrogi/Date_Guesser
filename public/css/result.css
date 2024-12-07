@@ -1,0 +1,97 @@
+* {
+margin: 0;
+padding: 0;
+box-sizing: border-box;
+font-family: "Poppins", sans-serif;
+font-family: "Bebas Neue", sans-serif;
+font-style: normal;
+}
+
+
+body {
+background-image: url(/BackGroundMap.png);
+background-repeat: no-repeat;
+background-size: cover; 
+background-position: top center; 
+}
+
+
+.background-wrapper {
+background-image: url(/BackGroundMap.png);
+background-repeat: no-repeat;
+background-size: contain; 
+background-position: top center;
+height: 100vh;
+max-width: 1200px; 
+margin: 0 auto; 
+display: flex;
+flex-direction: column;
+justify-content: center;
+align-items: center;
+}
+
+
+#results {
+display: flex;
+flex-direction: column;
+background-color: #EEEEEE;
+text-align: center;
+padding: 40px;
+border-radius: 10px;
+box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
+}
+
+
+h1 {
+font-size: 125px;
+color: black;
+}
+
+h3 {
+font-size: 70px;
+color: #666;
+}
+
+h2 {
+text-align: center;
+margin-top: 20px;
+font-size: 40px;
+color: black;
+}
+
+
+#thanksDiv {
+display: flex;
+flex-direction: column;
+justify-content: center;
+align-items: center;
+background-color: #EEEEEE;
+padding: 100px;
+margin-top: 5%;
+}
+
+#thanksDiv p {
+font-size: 60px;
+color: #555;
+}
+
+
+a {
+width: 400px;
+padding: 20px;
+font-size: 50px;
+margin: 20px auto 0;
+background-color: #4caf50;
+color: white;
+cursor: pointer;
+text-align: center;
+transition: transform 0.2s ease;
+border-radius: 10px;
+border-style: none;
+box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.3);
+text-decoration: none;
+}
+
+a:hover {
+transform: scale(1.05);
+}
