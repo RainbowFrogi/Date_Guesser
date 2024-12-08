@@ -114,12 +114,43 @@ fetch(geoJsonUrl)
 ////// --------- SLIDEBAR ------------
 
 const slider = document.getElementById("yearSlider"); ///// SlideBar Year
-const display = document.getElementById("yearDisplay");
+const display = document.getElementById("yearDisplay"); ///// Large number showing selected year
+const tooltip = document.getElementById("tooltip"); ///// Tooltip below slider "thumb" showing year
+
+const middlePoint = 1970 ///// middlepoint of year slider for easier searching
+
+let displayValue = 0
+
+slider.min = 0
+slider.max = (middlePoint-1800)*2;
+
+function place_thumb() {
+  //tooltip.style.left = ((slider.value-slider.min)/(slider.max-slider.min)*100) + "%";
+
+  tooltip.style.left = (slider.offsetWidth-30)*((slider.value-slider.min)/(slider.max-slider.min)) + "px"
+}
 
 slider.oninput = function () {
-  display.textContent = this.value;
+
+  if (this.value<(slider.max/2)) {
+    displayValue = 1800+parseInt(this.value)
+  }
+  else {
+    displayValue = Math.round(middlePoint+((this.value-(this.max/2))/(this.max/2)*(2024-middlePoint)));
+  }
+
+  display.textContent = displayValue;
+
+  place_thumb()
+
+  tooltip.innerText = displayValue;
 };
 
+  window.onload = function () {
+    place_thumb()
+    display.textContent = 2024
+    tooltip.innerText = 2024
+}
 
 //// Send The Guess To The Backend for Checking
 
