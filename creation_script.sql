@@ -32,4 +32,12 @@ VALUES
 (6,1940,"Japan", "/public/img/6.jpg"),
 (7,1959,"Cuba", "/public/img/7.jpg"),
 (8,1984,"Russia", "/public/img/8.jpg"),
-(9,1969,"United States of America", "/public/img/9.jpg");
+(9,1969,"United States of America", "/public/img/9.jpg"),
+(10,2019,"France", "/public/img/10.jpg"),
+(11,2020,"Lebanon", "/public/img/11.jpg"),
+(12,2001,"Afghanistan", "/public/img/12.jpg"),
+(13,2016,"United Kingdom", "/public/img/13.jpg"),
+(14,2021,"United States of America", "/public/img/14.jpg"),
+(15,2022,"United Kingdom", "/public/img/15.jpg"),
+(16,1989,"China", "/public/img/16.jpg");
+
