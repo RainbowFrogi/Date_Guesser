@@ -26,45 +26,61 @@ def get_location_max():
         print(row)
         return row
 
-def is_location_correct( id: int, year: int, country: str):
+def is_location_correct(id: int, year: int, country: str):
     cursor = connection.cursor()
-    cursor.execute(f"SELECT year, country FROM locations WHERE location_id = {id}")
-    row = cursor.fetchone()
-    result = {
-        "points": 0,
-        "message_date": "",
-        "message_country": "You guessed the wrong country, you got 0 points.",
-    }
-    points_date = 0
-    points_country = 0
-    difference = 100000000
-    if row is not None:
-        row_year = row[0]
-        row_country = row[1]
-        print(f"is_location_correct INFO: \"{row_year}\", \"{row_country}\"")
-        # POINTS FOR THE YEAR GUESS
-        difference = abs(row_year - year)
-        if difference == 0:
-            points_date = 1000
-        elif difference <= 10:
-            points_date = 500
-        elif difference <= 20:
-            points_date = 250
+    try:
+        cursor.execute("SELECT year, country FROM locations WHERE location_id = %s", (id,))
+        row = cursor.fetchone()
+    except Exception as e:
+        print(f"Database error: {e}")
+        return {
+            "points": 0,
+            "message_date": "An error occurred while processing your guess.",
+            "message_country": "Unable to verify the country due to an error.",
+        }
 
-        # POINTS FOR THE COUNTRY GUESS
-        if row_country == country:
-            points_country = 500
+    if row is None:
+        return {
+            "points": 0,
+            "message_date": "Invalid location ID provided.",
+            "message_country": "Invalid location ID provided.",
+        }
+
+    row_year, row_country = row
+    print(f"is_location_correct INFO: \"{row_year}\", \"{row_country}\"")
+
+    difference = abs(row_year - year)
+    direction = "too high" if year > row_year else "too low" if year < row_year else ""
+
+    # Non-linear scoring: Quadratic decay from 1000 to 50 points over 0 to 20 years difference
+    if difference >= 20:
+        points_date = 0
+    else:
+        points_date = max(1000 - (difference ** 2) * 950 / 400, 0)
+
+    # POINTS FOR THE COUNTRY GUESS
+    points_country = 500 if row_country == country else 0
 
     # DATE MESSAGE
-    if points_date == 1000:
-        result["message_date"] = "You got 1000 points by guessing the exact year!"
+    if difference == 0:
+        message_date = "You got 1000 points by guessing the exact year!"
+    elif difference < 20:
+        message_date = f"You were {difference} year(s) {direction}! You got {int(points_date)} points."
     else:
-        result["message_date"] = f"You were {difference} years off! You got {points_date} points!"
+        message_date = f"You were {difference} years off! You got {int(points_date)} points."
+
     # COUNTRY MESSAGE
-    if points_country == 500:
-        result["message_country"] = f"You got 500 points for guessing the right country"
+    message_country = "You got 500 points for guessing the right country." if points_country == 500 else "You guessed the wrong country, you got 0 points."
+
     # POINTS
-    result["points"] += points_country + points_date
+    total_points = int(points_date + points_country)
+
+    result = {
+        "points": total_points,
+        "message_date": message_date,
+        "message_country": message_country,
+    }
+
     return result
 
 
