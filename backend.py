@@ -50,9 +50,11 @@ def api_game_location_random():
     max = get_location_max()
     print(max[0])
     place = get_location(randint(1,max[0]))
+    print("place 1 = ", place)
     place = {
         "location_id": place[0],
         "path": place[1],
+        "description" : place[2]
     }
     return jsonify(place)
 
