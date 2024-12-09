@@ -194,10 +194,16 @@ function displayResult(){
     const informPlayerYear = document.createElement("p");
     informPlayerYear.textContent = `${roundResults.message_date}`;     ///// Inform About Their Year Guess
     displayDiv.appendChild(informPlayerYear);
+
+    const description = document.createElement("p");
+    description.textContent = photoDescription;           ///// Inform About The Location
+    displayDiv.appendChild(description);
 };
 
 
 ///// Get The Random Picture From Backend
+
+let photoDescription = ""; // Global variable for storing photo description
 
 async function getTheRandomLocation() {
   fetch("/api/game/location/random/")
@@ -211,6 +217,7 @@ async function getTheRandomLocation() {
       console.log("ResponseJSON", responseJson);
       locationID = responseJson.location_id;
       document.getElementById("photo").src = responseJson.path;   //// Display The Image Using Path From Backend
+      photoDescription = responseJson.description;  //// Reset The Zoom
     })
     .catch((error) => {
       console.log(error);

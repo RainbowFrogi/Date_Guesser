@@ -12,7 +12,7 @@ connection = mysql.connector.connect(
 
 def get_location(id: int):
     cursor = connection.cursor()
-    cursor.execute(f"SELECT location_id, image_path, description FROM locations WHERE location_id = '{id}' LIMIT 1;")
+    cursor.execute(f"SELECT location_id, image_path, image_description FROM locations WHERE location_id = '{id}' LIMIT 1;")
     row = cursor.fetchone()
     while row is not None:
         print(row)
