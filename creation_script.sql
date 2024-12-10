@@ -42,5 +42,5 @@ VALUES
 (15,2022,"United Kingdom", "/public/img/15.jpg", "This is a photo from the 2022 Queen Elizabeth II funeral in the UK"),
 (16,1989,"China", "/public/img/16.jpg", "The photo is from the tiananmen square massacre of 1989 in China"),
 (17,2021,"Egypt","/public/img/17.jpg","The container ship Ever Given in 2021 lodged in the Suez Canal as viewed from the ISS"),
-(18,1943,"Russia","/public/img/18.jpg","Stalingrad in 1943 after liberation from german occupation")
+(18,1943,"Russia","/public/img/18.jpg","Stalingrad in 1943 after liberation from german occupation");
 
