@@ -1,6 +1,7 @@
 from flask import Flask, jsonify, render_template, request, send_from_directory
 from model import get_location, get_location_max, is_location_correct
 from random import randint
+import random
 # import json
 # import mysql.connector
 
@@ -45,11 +46,19 @@ def result(result: str):
 #     #   It returns the "result.html" file from the "templates" folder
 #     #   and sets the result variable as the value from the path
 
-@app.route("/api/game/location/random/")
+@app.route("/api/game/location/random/", methods=["POST"])
 def api_game_location_random():
+    string_body = list(request.get_json())
+    body = [int(item) for item in string_body]
     max = get_location_max()
-    print(max[0])
-    place = get_location(randint(1,max[0]))
+    allnums = list(range(1, max[0]+1))
+    available_nums = [item for item in allnums if item not in body]
+    print("available numbers")
+    print(available_nums)
+    print(body)
+    print(type(body))
+    random_location = random.choice(available_nums)
+    place = get_location(random_location)
     print("place 1 = ", place)
     place = {
         "location_id": place[0],

@@ -7,6 +7,8 @@ let points = 0;
 
 let roundResults = null;
 
+let usedPhotoList = [0];
+
 
 ////// -------- Map -------------
 
@@ -133,6 +135,7 @@ async function submitTheGuess() {
     };
     console.log(sendGuessData)
 
+
     const response = await fetch("/api/game/guess/", {
       method: 'POST',
       headers: {
@@ -152,6 +155,8 @@ async function submitTheGuess() {
     console.log(responseData)
 
     roundResults = responseData;   //// Log the Data To The Global Variable For Code Cleanliness
+
+    usedPhotoList.push(locationID);    /// Add ID number of used photo to used photo list
 
   } catch (error) {
     console.error("Error submitting guess:", error);
@@ -206,7 +211,15 @@ function displayResult(){
 let photoDescription = ""; // Global variable for storing photo description
 
 async function getTheRandomLocation() {
-  fetch("/api/game/location/random/")
+  console.log(usedPhotoList)
+  console.log(JSON.stringify(usedPhotoList));
+  fetch("/api/game/location/random/", {
+      method: "POST",                // Sending data to the server using POST
+      headers: {
+        "Content-Type": "application/json" // Ensuring that the server knows it's JSON
+      },
+      body: JSON.stringify(usedPhotoList) // Converting JS object to JSON
+    })
     .then((response) => {
       if (response.ok) {                   
         return response.json();
